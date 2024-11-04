@@ -40,6 +40,7 @@
 
 .text_label {
     background-color: #f5ceb4;
+    font-weight: bold;
 }
 
 .text_label_details {
@@ -48,8 +49,19 @@
 
 .text_label_cost {
     background-color: #c1e0fb;
+    font-weight: bold;
 }
 
 .d-none {
     display: none;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+}
+
+.logo > img{
+    max-width: 180px;
+    height: auto;
 }
