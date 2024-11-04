@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaster Manager</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <p class="title">QUẢN LÝ LOG MỘC XÀ</p>
+        <div class="general">
+            <label for="total_printed" class="text_label">Tổng số hình đã in</label>
+            <p id="photos_printed"></p>
+        </div>
+        <div class="general d-none">
+            <label for="total_printed" class="text_label_details">Ảnh tiêu chuẩn (150.000 VND)</label>
+            <p id="total_printed"></p>
+        </div>
+        <div class="general d-none">
+            <label for="total_printed" class="text_label_details">Ảnh extra (70.000 VND)</label>
+            <p id="total_printed"></p>
+        </div>
+        <div class="general">
+            <label for="total_printed" class="text_label_cost">Doanh thu</label>
+            <p id="total_cost"></p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
