@@ -1,13 +1,44 @@
 from flask import Flask, render_template, jsonify
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 import os
 
 app = Flask(__name__)
 
+# Lấy thông tin kết nối từ biến môi trường (Render cung cấp DATABASE_URL)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:jDByXhwpo3SUoZvnXxpp4m0hLzOeUQ5o@dpg-cskrmi3v2p9s73aah130-a.oregon-postgres.render.com/coasterdpi_db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+id_CoasterDB = 654321
+
+def test_db_connection():
+    try:
+        # Thử kết nối tới cơ sở dữ liệu
+        db.session.execute(text('SELECT 1'))  # Truy vấn đơn giản để kiểm tra kết nối
+        print("Kết nối đến cơ sở dữ liệu PostgreSQL thành công!")
+    except Exception as e:
+        print(f"Lỗi kết nối cơ sở dữ liệu: {e}")
+
+class NumPhotosPrinted(db.Model):
+    __tablename__ = 'numphotosprinted'  # Tên bảng
+    id = db.Column(db.String(50), primary_key=True)  # Khóa chính
+    quantity = db.Column(db.Integer)
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        # test_db_connection()
+        result = db.session.execute(text("SELECT to_regclass('public.numphotosprinted')"))
+        table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
+        
+        if not table_exists:
+            db.create_all()
+        return render_template('index.html')
+    except Exception as e:
+        return f"Lỗi khi kiểm tra hoặc tạo bảng: {str(e)}" 
 
 @app.route('/get_photos_printed', methods=['GET'])
 def get_photos_printed():
@@ -25,11 +56,17 @@ def get_photos_printed():
     photos_printed_pos2 = get_count_files(path_pos2)
     photos_printed_pos3 = get_count_files(path_pos3)
 
+    file_count = 0
     if (photos_printed_pos1 == -1 | photos_printed_pos2 == -1 | photos_printed_pos3 == -1):
-        return jsonify({'error': 'Folder path not found!'})
+        result = db.session.execute(text("SELECT quantity FROM numphotosprinted WHERE id = :id"), {"id": id_CoasterDB})
+        value = result.fetchone()
+        file_count = value[0]
     else:
         file_count = photos_printed_pos1 + photos_printed_pos2 + photos_printed_pos3
-        return jsonify({'file_count': file_count}) 
+        # try catch
+        db.session.execute(text("UPDATE numphotosprinted SET quantity = :quantity WHERE id = :id"), {"quantity": file_count, "id": id_CoasterDB})
+    
+    return jsonify({'file_count': file_count}) 
 
 def get_count_files(folder_path):
     try:
