@@ -58,30 +58,27 @@ def get_photos_printed():
     
     today = datetime.now().strftime("%d.%m.%Y")
     file_count = 0
-    if ((photos_printed_pos1 == -1 and photos_printed_pos2 == -1 and photos_printed_pos3 == -1) and not os.path.exists(folder_path_pos2)):
+    if ((photos_printed_pos1 == 0 and photos_printed_pos2 == 0 and photos_printed_pos3 == 0) and not os.path.exists(folder_path_pos2)):
         result = db.session.execute(text("SELECT quantity FROM numphotosprinted WHERE id = :id"), {"id": id_CoasterDB})
         value = result.fetchone()
         print(value)
         file_count = value[0]
     else:
-        if os.path.exists(folder_path_pos2):
-            file_count = 0
-        else:
-            file_count = photos_printed_pos1 + photos_printed_pos2 + photos_printed_pos3
+        file_count = photos_printed_pos1 + photos_printed_pos2 + photos_printed_pos3
         try:
             db.session.execute(text("UPDATE numphotosprinted SET quantity = :quantity WHERE id = :id"), {"quantity": file_count, "id": id_CoasterDB})
             db.session.commit()
         except Exception as e:
             db.session.rollback()
             print(f"Lỗi: {e}")
-    
+
     return jsonify({'today': today, 'file_count': file_count}) 
 
 def get_count_files(folder_path):
     try:
         return len([name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))])
     except Exception as e:
-        return -1
+        return 0
 
 if __name__ == '__main__':
     app.run(debug=True)
