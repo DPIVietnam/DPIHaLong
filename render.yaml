@@ -9,4 +9,6 @@ services:
         value: production
       - key: PORT
         value: '10000'
+      - key: DATABASE_URL
+        value: 'postgresql://user:jDByXhwpo3SUoZvnXxpp4m0hLzOeUQ5o@dpg-cskrmi3v2p9s73aah130-a.oregon-postgres.render.com/coasterdpi_db'
     plan: free
