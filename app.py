@@ -63,6 +63,13 @@ def get_photos_printed():
             value = result.fetchone()
             print(value[0])
             file_count = value[0]
+        else:
+            try:
+                db.session.execute(text("UPDATE numphotosprinted SET quantity = :quantity WHERE id = :id"), {"quantity": file_count, "id": id_CoasterDB})
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                print(f"Lỗi: {e}")
     else:
         file_count = photos_printed_pos1 + photos_printed_pos2 + photos_printed_pos3
         try:
