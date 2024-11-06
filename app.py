@@ -58,10 +58,11 @@ def get_photos_printed():
 
     file_count = 0
     if (photos_printed_pos1 == -1 | photos_printed_pos2 == -1 | photos_printed_pos3 == -1):
-        result = db.session.execute(text("SELECT quantity FROM numphotosprinted WHERE id = :id"), {"id": id_CoasterDB})
-        value = result.fetchone()
-        print(value[0])
-        file_count = value[0]
+        if not os.path.exists(folder_path_pos2):
+            result = db.session.execute(text("SELECT quantity FROM numphotosprinted WHERE id = :id"), {"id": id_CoasterDB})
+            value = result.fetchone()
+            print(value[0])
+            file_count = value[0]
     else:
         file_count = photos_printed_pos1 + photos_printed_pos2 + photos_printed_pos3
         try:
@@ -71,7 +72,7 @@ def get_photos_printed():
             db.session.rollback()
             print(f"Lỗi: {e}")
     
-    return jsonify({'file_count': file_count}) 
+    return jsonify({'today': datetime.now().strftime("%d.%m.%Y"), 'file_count': file_count}) 
 
 def get_count_files(folder_path):
     try:

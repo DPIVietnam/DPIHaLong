@@ -6,6 +6,7 @@ $(document).ready(function() {
             url: "/get_photos_printed",
             success: function (response) {
                 file_count = response.file_count
+                $('#today').html('Ngày: ' + response.today)
                 if(file_count != num_photos_printed) {
                     $('#photos_printed').html(file_count + ' Hình Ảnh')
                     var cost = file_count * 150000
