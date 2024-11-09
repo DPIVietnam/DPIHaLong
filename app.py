@@ -1,9 +1,11 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 
 import os
+import qrcode
+import re
 
 app = Flask(__name__)
 
@@ -13,6 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 id_CoasterDB = 654321
+formatted_date = datetime.now().strftime("%Y.%m.%d")
 
 def test_db_connection():
     try:
@@ -42,8 +45,6 @@ def index():
 
 @app.route('/get_photos_printed', methods=['GET'])
 def get_photos_printed():
-    formatted_date = datetime.now().strftime("%Y.%m.%d")
-
     folder_path_pos1 = r'\\Coasterpos1\prints\Archive'
     folder_path_pos2 = r'\\Coasterpos2\prints\Archive'
     folder_path_pos3 = r'\\Coasterpos3\prints\Archive'
@@ -79,6 +80,66 @@ def get_count_files(folder_path):
         return len([name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))])
     except Exception as e:
         return 0
+    
+@app.route('/show_qrcode', methods=['POST'])
+def show_qrcode():
+    urlExample = 'https://sharepix.com.au/ht/uploads/'
+    numQr = request.json.get('numQr')
+
+    folder_path_pos1 = r'\\Coasterpos1\prints\Archive'
+    folder_path_pos2 = r'\\Coasterpos2\prints\Archive'
+    folder_path_pos3 = r'\\Coasterpos3\prints\Archive'
+
+    path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s6x8'
+    path_pos2 = folder_path_pos2 + f'\\{formatted_date}\\s6x8'
+    path_pos3 = folder_path_pos3 + f'\\{formatted_date}\\s6x8'
+
+    file_pattern = re.compile(r'\d{3}-\w{3}-' + re.escape(str(numQr)) + r'\.jpg')
+
+    def search_in_folder(folder_path):
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                print(file)
+                if file_pattern.match(file):  # Kiểm tra nếu tên file khớp với pattern
+                    return file  # Trả về tên file, không phải đường dẫn
+
+        return None  # Nếu không tìm thấy tệp nào khớp
+
+    url = ''
+    for path in [path_pos1, path_pos2, path_pos3]:
+        print(path)
+        result = search_in_folder(path)
+        print(result)
+        if result:
+            url = urlExample + result
+            break
+
+    if url == '':
+        return jsonify({'result': False})
+
+    qr = qrcode.QRCode(
+        version=1,  
+        error_correction=qrcode.constants.ERROR_CORRECT_L, 
+        box_size=10, 
+        border=4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill='black', back_color='white')
+
+    # Lưu hình ảnh vào thư mục /images
+    image_path = os.path.join('static/images', 'qrcode.png')  # Đặt đường dẫn lưu tệp
+
+    # Kiểm tra thư mục images có tồn tại không, nếu không thì tạo mới
+    if not os.path.exists('images'):
+        os.makedirs('images')
+
+    # Lưu hình ảnh vào tệp
+    img.save(image_path, 'PNG')
+
+    return jsonify({'result': True, 'path': image_path})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

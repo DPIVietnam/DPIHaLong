@@ -27,6 +27,19 @@
             <label for="total_printed" class="text_label_cost">Doanh thu</label>
             <p id="total_cost"></p>
         </div>
+
+        <div class="general show_qrcode">
+            <p class="title">TÌM LẠI QR CODE</p>
+            <div class="input-qrcode">
+                <label for="link-qrcode">Nhập số của Ảnh cần tìm</label>
+                <input type="text" id="input_qr" class="link-qrcode" placeholder="Example: 4011">
+                <button id="checkNumQr">Kiểm tra</button> 
+            </div>
+            <div class="output-qrcode" id="output_qr">
+                <img id="qrcode" src="/static/images/coaster.png" alt="QR Code will appear here" style="max-width: 300px;" />
+            </div>
+        </div>
+        
         <div class="logo">
             <img src="/static/images/dpi_logo.png" alt="DPI_LOGO">
         </div>
