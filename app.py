@@ -127,13 +127,10 @@ def show_qrcode():
     qr.make(fit=True)
 
     img = qr.make_image(fill='black', back_color='white')
+    img_name = numQr + '.png'
 
     # Lưu hình ảnh vào thư mục /images
-    image_path = os.path.join('static/images', 'qrcode.png')  # Đặt đường dẫn lưu tệp
-
-    # Kiểm tra thư mục images có tồn tại không, nếu không thì tạo mới
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    image_path = os.path.join('static/qrcode_backup/', img_name)  # Đặt đường dẫn lưu tệp
 
     # Lưu hình ảnh vào tệp
     img.save(image_path, 'PNG')
