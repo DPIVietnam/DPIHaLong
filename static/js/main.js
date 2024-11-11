@@ -42,6 +42,26 @@ $(document).ready(function() {
             }
         });
     }
-    fetchPhotosPrinted();
-    setInterval(fetchPhotosPrinted, 60000);
+
+    function fetchPhotosPrintedHt() {
+        $.ajax({
+            type: "GET",
+            url: "/get_photos_printed_ht",
+            success: function (response) {
+                if(response.file_count != num_photos_printed) {
+                    $('#photos_printed_ht').html(response.file_count + ' Hình Ảnh')
+                    $('#photo_standard').html(response.file_stand)
+                    $('#photo_full').html(response.file_full)
+                    $('#photo_extra').html(response.file_extra)
+                }
+                else {
+                    alert('error')
+                }
+            }
+        });
+    }
+    fetchPhotosPrinted()
+    fetchPhotosPrintedHt()
+    setInterval(fetchPhotosPrinted, 60000)
+    setInterval(fetchPhotosPrintedHt, 180000)
 });

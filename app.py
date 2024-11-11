@@ -15,7 +15,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 id_CoasterDB = 654321
-formatted_date = datetime.now().strftime("%Y.%m.%d")
+id_HtDB = '123456'
+now = datetime.now()
+formatted_date = now.strftime("%Y.%m.%d")
 
 def test_db_connection():
     try:
@@ -30,11 +32,20 @@ class NumPhotosPrinted(db.Model):
     id = db.Column(db.String(50), primary_key=True)  # Khóa chính
     quantity = db.Column(db.Integer)
 
+class NumPhotosPrintedHt(db.Model):
+    __tablename__ = 'numphotosprintedht'  # Tên bảng
+    id = db.Column(db.String(50), primary_key=True)  # Khóa chính
+    standard = db.Column(db.Integer)
+    full = db.Column(db.Integer)
+    extra = db.Column(db.Integer)
+    quantity = db.Column(db.Integer)
+    quantity_backup = db.Column(db.Integer)
+
 @app.route('/')
 def index():
     try:
         # test_db_connection()
-        result = db.session.execute(text("SELECT to_regclass('public.numphotosprinted')"))
+        result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
         table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
         
         if not table_exists:
@@ -62,7 +73,6 @@ def get_photos_printed():
     if ((photos_printed_pos1 == 0 and photos_printed_pos2 == 0 and photos_printed_pos3 == 0) and not os.path.exists(folder_path_pos2)):
         result = db.session.execute(text("SELECT quantity FROM numphotosprinted WHERE id = :id"), {"id": id_CoasterDB})
         value = result.fetchone()
-        print(value)
         file_count = value[0]
     else:
         file_count = photos_printed_pos1 + photos_printed_pos2 + photos_printed_pos3
@@ -137,6 +147,85 @@ def show_qrcode():
 
     return jsonify({'result': True, 'path': image_path})
     
+@app.route('/get_photos_printed_ht', methods=['GET'])
+def get_photos_printed_ht():
+    date_now = now.strftime("%Y_%m_%d")
+    target_time = now.replace(hour=16, minute=0, second=0, microsecond=0)
+    path_ops = r"\\PRINTSERVER1\CapImages\Ops"
+    photo_standard = 0
+    photo_extra = 0
+    photo_full = 0
+    try:
+        for file_name in os.listdir(path_ops):
+            if file_name.startswith(date_now) and file_name.endswith('_Log.txt'):
+                duong_dan_file = os.path.join(path_ops, file_name)
+
+                with open(duong_dan_file, 'r') as file:
+                    lines = file.readlines()
+
+                    # Lặp qua từng dòng để tính tổng tiền
+                    for line in lines:
+                        # Tách thông tin từ dòng
+                        thong_tin = line.strip().split(', ')
+
+                        # Lấy giá trị từ cột thứ 6 (số tiền)
+                        so_tien = int(thong_tin[5])
+
+                        # Lấy loại gói từ cột thứ 1
+                        loai_goi = thong_tin[1]
+
+                        # Tính tổng tiền dựa trên loại gói
+                        if "Standard" in loai_goi:
+                            photo_standard += 1
+                        elif "Extra" in loai_goi:
+                            photo_extra += 1
+                        elif "Full" in loai_goi:
+                            photo_full += 1
+    except Exception as e:
+        db.session.rollback()
+        print(f"Lỗi: {e}")
+        
+    folder_path_pos1 = r'\\PRINTSERVER1\prints\Archive'
+    folder_path_pos2 = r'\\PRINTSERVER3\prints\Archive'
+
+    path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s8x10'
+    path_pos2 = folder_path_pos2 + f'\\{formatted_date}\\s8x10'
+
+    photos_printed_pos1 = get_count_files(path_pos1)
+    photos_printed_pos2 = get_count_files(path_pos2)
+
+    file_stand = 0
+    file_full = 0
+    file_extra = 0
+    file_count = 0
+    # db.session.execute(text("INSERT INTO numphotosprintedht VALUES (:id, :standard, :full, :extra, :quantity, :quantity_backup)"), {"id": id_HtDB ,"standard": 0, "full": 0, "extra": 0, "quantity": 0, "quantity_backup": 0})
+    # db.session.commit()
+
+    result = db.session.execute(text("SELECT * FROM numphotosprintedht WHERE id = :id"), {"id": id_HtDB})
+    value = result.fetchone()
+
+    if (photos_printed_pos1 == 0 and photos_printed_pos2 == 0 and not os.path.exists(folder_path_pos1)):
+        file_stand = value[1]
+        file_full = value[2]
+        file_extra = value[3]
+        file_count = value[4]
+    else:
+        if now > target_time and os.path.exists(folder_path_pos1) and not os.path.exists(folder_path_pos2):
+            file_count = photos_printed_pos1 + value[5]
+        else:
+            file_count = photos_printed_pos1 + photos_printed_pos2
+        file_stand = photo_standard
+        file_full = photo_full
+        file_extra = photo_extra
+        try:
+            db.session.execute(text("""UPDATE numphotosprintedht SET standard = :standard, "full" = :photo_full, extra = :extra, quantity = :quantity, quantity_backup = :quantity_backup WHERE id = :id"""),
+                            {"standard": photo_standard, "photo_full": photo_full, "extra": photo_extra, "quantity": file_count, "quantity_backup": photos_printed_pos2, "id": id_HtDB})
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"Lỗi: {e}")
+
+    return jsonify({'file_stand': file_stand, 'file_full': file_full, 'file_extra': file_extra, 'file_count': file_count}) 
 
 if __name__ == '__main__':
     app.run(debug=True)
