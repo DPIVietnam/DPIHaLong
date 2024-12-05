@@ -10,11 +10,11 @@ import re
 app = Flask(__name__)
 
 # Lấy thông tin kết nối từ biến môi trường (Render cung cấp DATABASE_URL)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:jDByXhwpo3SUoZvnXxpp4m0hLzOeUQ5o@dpg-cskrmi3v2p9s73aah130-a.oregon-postgres.render.com/coasterdpi_db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:2AhiO5KyYdNcaHrflZo1auRKnaFoIGSs@dpg-ct8m0mlds78s73cd6efg-a.oregon-postgres.render.com/coasterdpi_db_gz4z')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-id_CoasterDB = 654321
+id_CoasterDB = '654321'
 id_HtDB = '123456'
 now = datetime.now()
 formatted_date = now.strftime("%Y.%m.%d")
@@ -56,6 +56,8 @@ def index():
 
 @app.route('/get_photos_printed', methods=['GET'])
 def get_photos_printed():
+    # db.session.execute(text("INSERT INTO numphotosprinted VALUES (:id, :quantity)"), {"id": id_HtDB, "quantity": 0})
+    # db.session.commit()
     folder_path_pos1 = r'\\Coasterpos1\prints\Archive'
     folder_path_pos2 = r'\\Coasterpos2\prints\Archive'
     folder_path_pos3 = r'\\Coasterpos3\prints\Archive'
@@ -193,6 +195,8 @@ def get_photos_printed_ht():
 
     photos_printed_pos1 = get_count_files(path_pos1)
     photos_printed_pos2 = get_count_files(path_pos2)
+
+    print(photos_printed_pos2)
 
     file_stand = 0
     file_full = 0
