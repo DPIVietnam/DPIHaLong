@@ -57,7 +57,7 @@ def index():
 
 @app.route('/get_photos_printed', methods=['GET'])
 def get_photos_printed():
-    # db.session.execute(text("INSERT INTO numphotosprinted VALUES (:id, :quantity)"), {"id": id_HtDB, "quantity": 0})
+    # db.session.execute(text("INSERT INTO numphotosprinted VALUES (:id, :quantity)"), {"id": id_CoasterDB, "quantity": 0})
     # db.session.commit()
     folder_path_pos1 = r'\\Coasterpos1\prints\Archive'
     folder_path_pos2 = r'\\Coasterpos2\prints\Archive'
