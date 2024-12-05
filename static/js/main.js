@@ -61,7 +61,7 @@ $(document).ready(function() {
         });
     }
     fetchPhotosPrinted()
-    // fetchPhotosPrintedHt()
+    fetchPhotosPrintedHt()
     setInterval(fetchPhotosPrinted, 60000)
-    // setInterval(fetchPhotosPrintedHt, 120000)
+    setInterval(fetchPhotosPrintedHt, 120000)
 });
