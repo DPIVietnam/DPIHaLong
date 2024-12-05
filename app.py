@@ -10,7 +10,7 @@ import re
 app = Flask(__name__)
 
 # Lấy thông tin kết nối từ biến môi trường (Render cung cấp DATABASE_URL)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:2AhiO5KyYdNcaHrflZo1auRKnaFoIGSs@dpg-ct8m0mlds78s73cd6efg-a.oregon-postgres.render.com/coasterdpi_db_gz4z')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:26NtG8FtgE6EcI30eOrp0JdKQa8DLZwt@dpg-ct8mise8ii6s73ccs6d0-a.singapore-postgres.render.com/coasterdpi03_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -44,12 +44,13 @@ class NumPhotosPrintedHt(db.Model):
 @app.route('/')
 def index():
     try:
-        # test_db_connection()
-        # result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
-        # table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
+        test_db_connection()
+        result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
+        table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
         
-        # if not table_exists:
-        #     db.create_all()
+        if not table_exists:
+            db.create_all()
+            print('Database created successfull')
         return render_template('index.html')
     except Exception as e:
         return f"Lỗi khi kiểm tra hoặc tạo bảng: {str(e)}" 
