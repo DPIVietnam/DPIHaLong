@@ -45,11 +45,11 @@ class NumPhotosPrintedHt(db.Model):
 def index():
     try:
         # test_db_connection()
-        result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
-        table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
+        # result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
+        # table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
         
-        if not table_exists:
-            db.create_all()
+        # if not table_exists:
+        #     db.create_all()
         return render_template('index.html')
     except Exception as e:
         return f"Lỗi khi kiểm tra hoặc tạo bảng: {str(e)}" 
