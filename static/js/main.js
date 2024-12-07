@@ -48,6 +48,8 @@ $(document).ready(function() {
             type: "GET",
             url: "/get_photos_printed_ht",
             success: function (response) {
+                console.log(response.file_customer);
+                
                 if(response.file_count != num_photos_printed) {
                     $('#photos_printed_ht').html(response.file_count + ' Hình Ảnh')
                     $('#photo_standard').html(response.file_stand)

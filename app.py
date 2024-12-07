@@ -248,7 +248,7 @@ def get_photos_printed_ht():
             db.session.rollback()
             print(f"Lỗi: {e}")
 
-    return jsonify({'file_stand': file_stand, 'file_full': file_full, 'file_extra': file_extra, 'customer': file_customer, 'file_count': file_count}) 
+    return jsonify({'file_stand': file_stand, 'file_full': file_full, 'file_extra': file_extra, 'file_customer': file_customer, 'file_count': file_count}) 
 
 if __name__ == '__main__':
     app.run(debug=True)
