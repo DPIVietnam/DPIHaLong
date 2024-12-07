@@ -38,6 +38,7 @@ class NumPhotosPrintedHt(db.Model):
     standard = db.Column(db.Integer)
     full = db.Column(db.Integer)
     extra = db.Column(db.Integer)
+    customer = db.Column(db.Integer)
     quantity = db.Column(db.Integer)
     quantity_backup = db.Column(db.Integer)
 
@@ -45,6 +46,7 @@ class NumPhotosPrintedHt(db.Model):
 def index():
     try:
         test_db_connection()
+        # delete = db.session.execute(text("DROP TABLE numphotosprintedht"))
         result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
         table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
         
@@ -91,6 +93,12 @@ def get_photos_printed():
 def get_count_files(folder_path):
     try:
         return len([name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))])
+    except Exception as e:
+        return 0
+
+def get_count_folder(folder_path):
+    try:
+        return len([name for name in os.listdir(folder_path)])
     except Exception as e:
         return 0
     
@@ -155,9 +163,11 @@ def get_photos_printed_ht():
     date_now = now.strftime("%Y_%m_%d")
     target_time = now.replace(hour=16, minute=0, second=0, microsecond=0)
     path_ops = r"\\PRINTSERVER1\CapImages\Ops"
+    customer_path = r"\\PRINTSERVER1\Customers"
     photo_standard = 0
     photo_extra = 0
     photo_full = 0
+    photo_customer = get_count_folder(customer_path)
     try:
         for file_name in os.listdir(path_ops):
             if file_name.startswith(date_now) and file_name.endswith('_Log.txt'):
@@ -197,11 +207,11 @@ def get_photos_printed_ht():
     photos_printed_pos1 = get_count_files(path_pos1)
     photos_printed_pos2 = get_count_files(path_pos2)
 
-    print(photos_printed_pos2)
 
     file_stand = 0
     file_full = 0
     file_extra = 0
+    file_customer = 0
     file_count = 0
     # db.session.execute(text("INSERT INTO numphotosprintedht VALUES (:id, :standard, :full, :extra, :quantity, :quantity_backup)"), {"id": id_HtDB ,"standard": 0, "full": 0, "extra": 0, "quantity": 0, "quantity_backup": 0})
     # db.session.commit()
@@ -213,7 +223,8 @@ def get_photos_printed_ht():
         file_stand = value[1]
         file_full = value[2]
         file_extra = value[3]
-        file_count = value[4]
+        file_customer = value[4]
+        file_count = value[5]
     else:
         if now > target_time and os.path.exists(folder_path_pos1) and not os.path.exists(folder_path_pos2):
             file_count = photos_printed_pos1 + value[5]
@@ -222,15 +233,16 @@ def get_photos_printed_ht():
         file_stand = photo_standard
         file_full = photo_full
         file_extra = photo_extra
+        file_customer = photo_customer
         try:
-            db.session.execute(text("""UPDATE numphotosprintedht SET standard = :standard, "full" = :photo_full, extra = :extra, quantity = :quantity, quantity_backup = :quantity_backup WHERE id = :id"""),
-                            {"standard": photo_standard, "photo_full": photo_full, "extra": photo_extra, "quantity": file_count, "quantity_backup": photos_printed_pos2, "id": id_HtDB})
+            db.session.execute(text("""UPDATE numphotosprintedht SET standard = :standard, "full" = :photo_full, extra = :extra, customer = :customer, quantity = :quantity, quantity_backup = :quantity_backup WHERE id = :id"""),
+                            {"standard": photo_standard, "photo_full": photo_full, "extra": photo_extra, "customer": file_customer, "quantity": file_count, "quantity_backup": photos_printed_pos2, "id": id_HtDB})
             db.session.commit()
         except Exception as e:
             db.session.rollback()
             print(f"Lỗi: {e}")
 
-    return jsonify({'file_stand': file_stand, 'file_full': file_full, 'file_extra': file_extra, 'file_count': file_count}) 
+    return jsonify({'file_stand': file_stand, 'file_full': file_full, 'file_extra': file_extra, 'customer': file_customer, 'file_count': file_count}) 
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -53,6 +53,7 @@ $(document).ready(function() {
                     $('#photo_standard').html(response.file_stand)
                     $('#photo_full').html(response.file_full)
                     $('#photo_extra').html(response.file_extra)
+                    $('#photo_customer').html(response.file_customer)
                 }
                 else {
                     alert('error')
