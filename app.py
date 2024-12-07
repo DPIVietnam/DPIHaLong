@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 id_CoasterDB = '654321'
-id_HtDB = '123456'
+id_HtDB = '999999'
 now = datetime.now()
 formatted_date = now.strftime("%Y.%m.%d")
 
@@ -46,13 +46,17 @@ class NumPhotosPrintedHt(db.Model):
 def index():
     try:
         test_db_connection()
-        # delete = db.session.execute(text("DROP TABLE numphotosprintedht"))
+        # delete = db.session.execute(text("DELETE FROM numphotosprintedht WHERE id = :id"), {'id': '123456'})
+        # db.session.commit()
         result = db.session.execute(text("SELECT to_regclass('public.numphotosprintedht')"))
         table_exists = result.scalar()  # Dùng scalar() để lấy kết quả từ câu lệnh SQL
+        
         
         if not table_exists:
             db.create_all()
             print('Database created successfull')
+        else:
+            print('nnn')
         return render_template('index.html')
     except Exception as e:
         return f"Lỗi khi kiểm tra hoặc tạo bảng: {str(e)}" 
@@ -213,11 +217,13 @@ def get_photos_printed_ht():
     file_extra = 0
     file_customer = 0
     file_count = 0
-    # db.session.execute(text("INSERT INTO numphotosprintedht VALUES (:id, :standard, :full, :extra, :quantity, :quantity_backup)"), {"id": id_HtDB ,"standard": 0, "full": 0, "extra": 0, "quantity": 0, "quantity_backup": 0})
+    # db.session.execute(text("INSERT INTO numphotosprintedht VALUES (:id, :standard, :full, :extra, :customer, :quantity, :quantity_backup)"), {"id": id_HtDB ,"standard": 0, "full": 0, "extra": 0, "customer": 0, "quantity": 0, "quantity_backup": 0})
     # db.session.commit()
 
     result = db.session.execute(text("SELECT * FROM numphotosprintedht WHERE id = :id"), {"id": id_HtDB})
     value = result.fetchone()
+
+    print(value)
 
     if (photos_printed_pos1 == 0 and photos_printed_pos2 == 0 and not os.path.exists(folder_path_pos1)):
         file_stand = value[1]
