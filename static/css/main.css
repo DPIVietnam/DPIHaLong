@@ -29,6 +29,7 @@ p {
 .general {
     display: flex;
     max-width: 768px;
+    margin: 10px 0;
 }
 
 .general * {
@@ -138,6 +139,10 @@ button:hover {
 
     .add_files_container {
         display: none !important;
+    }
+
+    .general label {
+        width: 60%;
     }
 }
 
