@@ -6,63 +6,128 @@
     <title>Coaster Manager</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="container">
-        <p class="title">QUẢN LÝ LOG MỘC XÀ</p>
+        <p class="title">DIGITAL PHOTO INDUSTRIES</p>
         <p id="today">Ngày: </p>
-        <div class="general">
-            <label for="total_printed" class="text_label">Tổng số hình đã in</label>
-            <p id="photos_printed"></p>
-        </div>
-        <div class="general d-none">
-            <label for="total_printed" class="text_label_details">Ảnh tiêu chuẩn (150.000 VND)</label>
-            <p id="total_printed"></p>
-        </div>
-        <div class="general d-none">
-            <label for="total_printed" class="text_label_details">Ảnh extra (70.000 VND)</label>
-            <p id="total_printed"></p>
-        </div>
-        <div class="general">
-            <label for="total_printed" class="text_label_cost">Doanh thu</label>
-            <p id="total_cost"></p>
-        </div>
-
-        <div class="general show_qrcode">
-            <p class="title">TÌM LẠI QR CODE</p>
-            <div class="input-qrcode">
-                <label for="link-qrcode">Nhập số của Ảnh cần tìm</label>
-                <input type="text" id="input_qr" class="link-qrcode" placeholder="Example: 4011">
-                <button id="checkNumQr">Kiểm tra</button> 
+        <div class="tabs">
+            <div class="tab-buttons">
+                <p class="tab-button active title" id="tab-coaster">Quản lý log mộc xà</p>
+                <p class="title tab-button" id="tab-honthom">Quản lý log hòn thơm</p>
             </div>
-            <div class="output-qrcode" id="output_qr">
-                <img id="qrcode" src="/static/images/coaster.png" alt="QR Code will appear here" style="max-width: 300px;" />
+            
+            <div class="tab-content">
+                <!-- Form 1: Mã hóa và Gửi -->
+                <div class="tab-pane active" id="tab1">
+                    <div class="general">
+                        <label for="total_printed" class="text_label">Tổng số hình đã in</label>
+                        <p id="photos_printed"></p>
+                    </div>
+                    <div class="general d-none">
+                        <label for="total_printed" class="text_label_details">Ảnh tiêu chuẩn (150.000 VND)</label>
+                        <p id="total_printed"></p>
+                    </div>
+                    <div class="general d-none">
+                        <label for="total_printed" class="text_label_details">Ảnh extra (70.000 VND)</label>
+                        <p id="total_printed"></p>
+                    </div>
+                    <div class="general">
+                        <label for="total_printed" class="text_label_cost">Doanh thu</label>
+                        <p id="total_cost"></p>
+                    </div>
+            
+                    <div class="general show_qrcode">
+                        <p class="title">TÌM LẠI QR CODE</p>
+                        <div class="input-qrcode">
+                            <label for="link-qrcode">Nhập số của Ảnh cần tìm</label>
+                            <input type="text" id="input_qr" class="link-qrcode" placeholder="Example: 4011">
+                            <button id="checkNumQr">Kiểm tra</button> 
+                        </div>
+                        <div class="output-qrcode" id="output_qr">
+                            <img id="qrcode" src="/static/images/coaster.png" alt="QR Code will appear here" style="max-width: 300px;" />
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Form 2: Mã hóa văn bản -->
+                <div class="tab-pane" id="tab2">
+                    <div class="general">
+                        <label for="total_printed_ht" class="text_label">Tổng số hình đã in</label>
+                        <p id="photos_printed_ht"></p>
+                    </div>
+                    <div class="general">
+                        <label for="total_printed" class="text_label_details">Standard Package</label>
+                        <p id="photo_standard"></p>
+                    </div>
+                    <div class="general">
+                        <label for="total_printed" class="text_label_details">Full Package</label>
+                        <p id="photo_full"></p>
+                    </div>
+                    <div class="general">
+                        <label for="total_printed" class="text_label_details">Extra</label>
+                        <p id="photo_extra"></p>
+                    </div>
+                    <div class="general">
+                        <label for="total_printed" class="text_label_details">Customer</label>
+                        <p id="photo_customer"></p>
+                    </div>
+
+                    <div class="add_files_container">
+                        <p class="sub-title">1. Thêm file ảnh cho khách</p>
+                        <div class="add_files_row">
+                            <div class="files_printed">
+                                <label for="imgNumber">Ảnh đã in: </label>
+                                <input type="text" id="lastFiveDigits" name="last_five_digits" required placeholder="Nhập số hình ảnh">
+                                <button onclick="check_dir()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                            <div class="files_more">
+                                <label for="lastFiveDigits">Ảnh cần thêm: </label>
+                                <input type="text" id="imgNumber" placeholder="Nhập số hình ảnh" name="find_img_add" required>
+                                <button onclick="checkImage()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                        </div>
+                        <div class="img_display">
+                            <div class="img_more">
+                                <p id="result1"></p>
+                                <div id="check_dir_img"></div>
+                            </div>
+                            <div class="img_printed">
+                                <p id="result"></p>
+                                <div id="imageContainer"></div>
+                            </div>
+                        </div>
+                        <button class="btn_submit" id="add_more_images">Thêm ảnh điện tử</button>
+                    </div>
+
+                    <div class="add_files_container">
+                        <p class="sub-title">2. Chỉnh sửa ảnh lỗi</p>
+                        <div class="add_files_row">
+                            <div class="display_img">
+                                <div class="files_printed">
+                                    <input type="text" id="err_imgNumber" placeholder="Nhập số hình ảnh" required>
+                                    <button id="find_img"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                                <p id="err_result"></p>
+                                <div id="err_imageContainer"></div>
+                            </div>
+                            
+                            <div class="files_more">
+                                <div class="d-flex btn-right">
+                                    <button id="edit_try">Thử lại</button>
+                                    <button id="reload_img">Reload hình ảnh</button>
+                                </div>
+                                <p id="err_result1" style="margin-top: 4px"> Ảnh sau khi sửa </p>
+                                <div id="err_imageContainer1"></div>
+                            </div>
+                        </div>
+                        <button class="btn_submit" id="remove_bg">Tách nền</button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <br>
-        <p class="title">QUẢN LÝ LOG HÒN THƠM</p>
-        <div class="general">
-            <label for="total_printed_ht" class="text_label">Tổng số hình đã in</label>
-            <p id="photos_printed_ht"></p>
-        </div>
-        <div class="general">
-            <label for="total_printed" class="text_label_details">Standard Package</label>
-            <p id="photo_standard"></p>
-        </div>
-        <div class="general">
-            <label for="total_printed" class="text_label_details">Full Package</label>
-            <p id="photo_full"></p>
-        </div>
-        <div class="general">
-            <label for="total_printed" class="text_label_details">Extra</label>
-            <p id="photo_extra"></p>
-        </div>
-        <div class="general">
-            <label for="total_printed" class="text_label_details">Customer</label>
-            <p id="photo_customer"></p>
-        </div>
-        
         <div class="logo">
             <img src="/static/images/dpi_logo.png" alt="DPI_LOGO">
         </div>
@@ -70,5 +135,6 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
