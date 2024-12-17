@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
 }
 
 p {
@@ -28,7 +29,6 @@ p {
 
 .general {
     display: flex;
-    max-width: 768px;
     margin: 10px 0;
 }
 
@@ -189,7 +189,6 @@ button:hover {
  
 .tabs {
     width: 95%;
-    max-width: 768px;
     border: 1px solid black;
 }
 
@@ -284,7 +283,7 @@ button:hover {
 }
 
 #lastFiveDigits {
-    width: 55.5%;
+    width: 65.5%;
 }
 
 #imageContainer img, #err_imageContainer img {
@@ -306,4 +305,16 @@ p#result, #err_result {
 
 #err_result1 {
     font-size: 0.7rem;
+}
+
+.rembg .files_more {
+    display: block;
+}
+
+#imgNumber {
+    width: 58%;
+}
+
+.rembg .files_more button {
+    padding: 5px 20px;
 }
