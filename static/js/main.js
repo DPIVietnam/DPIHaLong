@@ -269,6 +269,17 @@ $(document).ready(function() {
         $("#reload_img").css("display", "block");
     });
 
+    $("reload_img").on("click", function() {
+        $.ajax({
+            url: '/reload_img',
+            type: 'POST',
+            contentType: 'application/json',
+            success: function(response) {
+                $('#err_imageConatiner1').html("<img src='" + response.img_path + "'" + 'width="100%"');
+            }
+        })
+    })
+
     setInterval(fetchPhotosPrinted, 60000)
     setInterval(fetchPhotosPrintedHt, 120000)
 });
