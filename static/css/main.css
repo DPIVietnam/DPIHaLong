@@ -144,6 +144,10 @@ button:hover {
     .general label {
         width: 60%;
     }
+
+    .tabs p, .tabs label {
+        font-size: 0.9rem;
+    }
 }
 
 /* Tab Buttons */
@@ -317,4 +321,8 @@ p#result, #err_result {
 
 .rembg .files_more button {
     padding: 5px 20px;
+}
+
+.general.send_photo {
+    display: block;
 }
