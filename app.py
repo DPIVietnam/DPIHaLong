@@ -15,7 +15,7 @@ import re
 app = Flask(__name__)
 
 # Lấy thông tin kết nối từ biến môi trường (Render cung cấp DATABASE_URL)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:26NtG8FtgE6EcI30eOrp0JdKQa8DLZwt@dpg-ct8mise8ii6s73ccs6d0-a.singapore-postgres.render.com/coasterdpi03_db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:RYw873tYkMT8RMgZ3gNuaWiBzxxfdQY6@dpg-cuhd3ud2ng1s7384s7u0-a.frankfurt-postgres.render.com/coasterdpi05_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -479,7 +479,7 @@ def remove_bg():
     _, thresh = cv2.threshold(test, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
     # Blur thresholded image
-    blur = cv2.GaussianBlur(thresh, (0, 0), sigmaX=1, sigmaY=0, borderType=cv2.BORDER_DEFAULT)
+    blur = cv2.GaussianBlur(thresh, (15, 15), sigmaX=3, sigmaY=0, borderType=cv2.BORDER_DEFAULT)
 
     # Stretch intensity
     mask = exposure.rescale_intensity(blur, in_range=(127.5, 255), out_range=(0, 255)).astype(np.uint8)
