@@ -15,7 +15,7 @@ import re
 app = Flask(__name__)
 
 # Lấy thông tin kết nối từ biến môi trường (Render cung cấp DATABASE_URL)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:PfIxID14uMjuPuzLI7UXUuBDYOxI00Do@dpg-cupdfilumphs73e54un0-a.singapore-postgres.render.com/coasterdpi06_db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:gdr07MPxeIL5cwpaSXarznA4FeEabZgN@dpg-cvd8gerv2p9s73ccj2ng-a.oregon-postgres.render.com/coasterdpi07_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
