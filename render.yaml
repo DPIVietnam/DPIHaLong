@@ -10,5 +10,5 @@ services:
       - key: PORT
         value: '10000'
       - key: DATABASE_URL
-        value: 'postgresql://user:gdr07MPxeIL5cwpaSXarznA4FeEabZgN@dpg-cvd8gerv2p9s73ccj2ng-a.oregon-postgres.render.com/coasterdpi07_db'
+        value: 'postgresql://user:Aj5n1MY9SlFqzxVWeZCICmiIhv5xGIBt@dpg-cvic76buibrs73a4mlr0-a.singapore-postgres.render.com/coasterdpi08_db'
     plan: free
