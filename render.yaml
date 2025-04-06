@@ -8,7 +8,7 @@ services:
       - key: FLASK_ENV
         value: production
       - key: PORT
-        value: '10000'
+        value: '10000' 
       - key: DATABASE_URL
         value: 'postgresql://user:eznDvAG0y55vZpWOWgG5EvttIu9f7o4J@dpg-cvp3mpbe5dus73ca224g-a.singapore-postgres.render.com/coasterdpi10_db'
     plan: free
