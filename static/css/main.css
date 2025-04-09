@@ -234,7 +234,6 @@ button:hover {
 }
 
 .add_files_row input {
-    border: none;
     border-bottom: 2px solid red;
     font-size: 14px;
     padding: 5px 0 0;
@@ -325,4 +324,51 @@ p#result, #err_result {
 
 .general.send_photo {
     display: block;
+}
+
+.btn-search {
+    display: flex;
+    padding: 10px 20px;
+}
+
+.btn_submit {
+    padding: 10px;
+}
+
+#old-photo {
+    width: 100%;
+    margin-left: 10px;
+    border: 1px solid black;
+}
+
+.btn-search {
+    background-color: ivory;
+    transition: background-color 0.5s;
+}
+
+#old-photo i {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.old-photo-container {
+    width: 100%;
+    display: flex;
+    margin: 0 10px;
+}
+
+.old-photo-container input {
+    width: 50%;
+}
+
+#notification {
+    display: none;
+    background-color: #4CAF50; /* Màu nền xanh */
+    color: white;
+    padding: 15px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    border-radius: 5px;
+    z-index: 9999;
 }

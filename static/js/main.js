@@ -280,6 +280,38 @@ $(document).ready(function() {
         })
     })
 
+    var today = new Date().toISOString().split('T')[0];
+    $('#datePhoto').attr('max', today);
+
+    $("#old-photo").on("click", function() {
+        let imgNumber = $('#numOldPhoto').val()
+        let datePhoto = $('#datePhoto').val()
+        
+        if (imgNumber == "" || datePhoto == "") {
+            alert("THIẾU SỐ ẢNH HOẶC NGÀY CHỤP RỒI!!! BABY")
+
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/find_old_photo",
+                contentType: 'application/json',
+                data: JSON.stringify({img_number: imgNumber, datePhoto: datePhoto}),
+                success: function (response) {
+                    if(response.result) {
+                        $('#notification').fadeIn();
+                        // Ẩn thông báo sau 3 giây
+                        setTimeout(function() {
+                            $('#notification').fadeOut();
+                        }, 3000); // 3000ms = 3s
+                    }
+                }
+            });
+        }
+        
+        
+    })
+
     setInterval(fetchPhotosPrinted, 60000)
     setInterval(fetchPhotosPrintedHt, 120000)
 });

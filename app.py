@@ -11,6 +11,7 @@ import numpy as np
 import os
 import qrcode
 import re
+import shutil
 
 app = Flask(__name__)
 
@@ -208,8 +209,8 @@ def get_photos_printed_ht():
         db.session.rollback()
         print(f"Lỗi: {e}")
         
-    folder_path_pos1 = r'\\PRINTSERVER1\prints\Archive'
-    folder_path_pos2 = r'\\PRINTSERVER3\prints\Archive'
+    folder_path_pos1 = f"\\PRINTSERVER1\\prints\\Archive"
+    folder_path_pos2 = f"\\PRINTSERVER3\\prints\\Archive"
 
     path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s8x10'
     path_pos2 = folder_path_pos2 + f'\\{formatted_date}\\s8x10'
@@ -496,6 +497,54 @@ def remove_bg():
     cv2.imwrite(backup_result_path, result)
 
     return jsonify({'result': True, 'img_after_edit': backup_result_path})
+
+def find_file_in_directory(path, name):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)
+    return None
+
+def fetchFolder(root_dir, datePhoto, numOldPhoto):
+    imgFile = f"img{numOldPhoto}.png"
+    rawFile = f"img{numOldPhoto}.jpg"
+    for foldername in os.listdir(root_dir):
+        folder_path = os.path.join(root_dir, foldername)
+        # Kiểm tra nếu là thư mục và tên thư mục chứa chuỗi tìm kiếm
+        if os.path.isdir(folder_path) and datePhoto in foldername:
+            print(f"Thư mục tìm thấy: {folder_path}")
+
+            pathImg = find_file_in_directory(folder_path, imgFile)
+            pathRaw = find_file_in_directory(os.path.join(folder_path, "RawFiles"), rawFile)
+            print(pathImg)
+            if pathImg != None:
+                CapImagesPath = f"//PRINTSERVER1/CapImages/img{numOldPhoto}5.png"
+                shutil.copy(pathImg, CapImagesPath)
+            if pathRaw != None:
+                RawFilePath = f"//PRINTSERVER1/CapImages/RawFiles/img{numOldPhoto}5.jpg"
+                shutil.copy(pathRaw, RawFilePath)
+            return True
+    return False
+
+@app.route('/find_old_photo', methods=["POST"])
+def find_old_photo():
+    numOldPhoto = request.json.get("img_number")
+    date_string = request.json.get("datePhoto")
+
+    date_obj = datetime.strptime(date_string, "%Y-%m-%d")
+
+    datePhoto = date_string.replace(f"-0{date_obj.month}-", f"-{date_obj.month}-")
+
+    root_directory_DiskC = f"//PRINTSERVER1/CapImages"
+    root_directory = f"//PRINTSERVER1/CapImages_backup"
+
+    found = fetchFolder(root_directory_DiskC, datePhoto, numOldPhoto)
+    if not found:
+        found = fetchFolder(root_directory, datePhoto, numOldPhoto)
+        if not found:
+            print(f"Không tìm thấy thư mục có tên chứa chuỗi '{datePhoto}'")
+            return None 
+
+    return jsonify({"result": "sucess"})
 
 if __name__ == '__main__':
     app.run(debug=True)
