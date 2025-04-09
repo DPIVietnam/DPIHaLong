@@ -269,7 +269,7 @@ $(document).ready(function() {
         $("#reload_img").css("display", "block");
     });
 
-    $("reload_img").on("click", function() {
+    $("#reload_img").on("click", function() {
         $.ajax({
             url: '/reload_img',
             type: 'POST',

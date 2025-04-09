@@ -480,13 +480,25 @@ def remove_bg():
     _, thresh = cv2.threshold(test, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
     # Blur thresholded image
-    blur = cv2.GaussianBlur(thresh, (15, 15), sigmaX=3, sigmaY=0, borderType=cv2.BORDER_DEFAULT)
+    blur = cv2.GaussianBlur(thresh, (15, 15), sigmaX=4, sigmaY=0, borderType=cv2.BORDER_DEFAULT)
 
     # Stretch intensity
     mask = exposure.rescale_intensity(blur, in_range=(127.5, 255), out_range=(0, 255)).astype(np.uint8)
 
     # Add mask to image as alpha channel
     result = img.copy()
+    # Chuyển đổi ảnh sang không gian màu HLS
+    hls = cv2.cvtColor(result, cv2.COLOR_BGR2HLS)
+
+    # Tách các kênh H, L, S
+    h, l, s = cv2.split(hls)
+
+    # Giảm độ bão hòa (S channel)
+    s = cv2.multiply(s, 0.9)  # Giảm độ bão hòa xuống 50%, có thể thử với giá trị khác tùy ý
+
+    # Gộp lại các kênh và chuyển về không gian BGR
+    result_hls = cv2.merge((h, l, s))
+    result = cv2.cvtColor(result_hls, cv2.COLOR_HLS2BGR)
     b, g, r = cv2.split(result)
     result = cv2.merge((b, g, r, mask))
 
