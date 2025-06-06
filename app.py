@@ -16,7 +16,7 @@ import shutil
 app = Flask(__name__)
 
 # Lấy thông tin kết nối từ biến môi trường (Render cung cấp DATABASE_URL)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:y0d9gqlWInY1btXsNRRQVdpIcrLf3cJ8@dpg-d0d48m15pdvs73f6ues0-a.singapore-postgres.render.com/coasterdpi11_db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:pnpmhfO9iiK6gh4cbMQo9J21qkKrWhTs@dpg-d117lvp5pdvs73emfefg-a.singapore-postgres.render.com/coasterdpi12_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
