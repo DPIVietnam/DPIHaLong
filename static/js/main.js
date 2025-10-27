@@ -1,4 +1,16 @@
 $(document).ready(function() {
+
+    function get_today() {
+        $.ajax({
+            type: "GET",
+            url: "/get_today",
+            success: function(response) {
+                $('#today').html('Ngày: ' + response.today)
+            }
+        })
+    }
+    get_today()
+
     let num_photos_printed = -1;
     function fetchPhotosPrinted() {
         $.ajax({

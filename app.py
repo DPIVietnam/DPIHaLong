@@ -67,6 +67,11 @@ def index():
     except Exception as e:
         return f"Lỗi khi kiểm tra hoặc tạo bảng: {str(e)}" 
 
+@app.route('/get_today', methods=['GET'])
+def get_today():
+    today = datetime.now().strftime("%d.%m.%Y")
+    return jsonify({'today': today})
+
 @app.route('/get_photos_printed', methods=['GET'])
 def get_photos_printed():
     # db.session.execute(text("INSERT INTO numphotosprinted VALUES (:id, :quantity)"), {"id": id_CoasterDB, "quantity": 0})
