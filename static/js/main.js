@@ -29,11 +29,13 @@ $(document).ready(function() {
                 console.log(response.file_customer);
                 
                 if(response.file_count != num_photos_printed) {
-                    $('#photos_printed_ht').html(response.file_count + ' Hình Ảnh')
+                    $('#photos_printed_ht').html(response.file_count + ' photos')
                     $('#photo_standard').html(response.file_stand)
                     $('#photo_full').html(response.file_full)
                     $('#photo_extra').html(response.file_extra)
                     $('#photo_customer').html(response.file_customer)
+                    let total_money = Number(response.file_stand)*300000 + Number(response.file_full)*440000 + Number(response.file_extra)*80000
+                    $('#total_money').html(new Intl.NumberFormat('de-DE').format(total_money) + ' VNĐ')
                 }
                 else {
                     alert('error')
