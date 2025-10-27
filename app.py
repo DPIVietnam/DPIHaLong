@@ -164,6 +164,7 @@ def get_photos_printed_ht():
     folder_path_pos2 = f"\\DPIPrintserver2\\prints\\Archive"
 
     photos_printed_pos1 = 0
+    photos_printed_pos2 = 0
 
     if os.path.exists(folder_path_pos1):
         path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s8x10'
