@@ -123,6 +123,7 @@ def get_photos_printed_ht():
     photo_extra = 0
     photo_full = 0
     photo_customer = get_count_folder(customer_path)
+    print(date_now)
     try:
         for file_name in os.listdir(path_ops):
             if file_name.startswith(date_now) and file_name.endswith('_Log.txt'):

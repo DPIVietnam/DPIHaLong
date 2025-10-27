@@ -42,7 +42,7 @@ $(document).ready(function() {
         });
     }
 
-    fetchPhotosPrinted()
+    // fetchPhotosPrinted()
     fetchPhotosPrintedHt()
 
     const $tabButton1 = $('#tab-coaster');
@@ -76,6 +76,6 @@ $(document).ready(function() {
         $tabPane2.addClass('active')
     });
 
-    setInterval(fetchPhotosPrinted, 120000)
+    // setInterval(fetchPhotosPrinted, 120000)
     setInterval(fetchPhotosPrintedHt, 120000)
 });
