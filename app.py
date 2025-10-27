@@ -138,7 +138,7 @@ def get_photos_printed_ht():
                         thong_tin = line.strip().split(', ')
 
                         # Lấy giá trị từ cột thứ 6 (số tiền)
-                        so_tien = int(thong_tin[5])
+                        # so_tien = int(thong_tin[5])
 
                         # Lấy loại gói từ cột thứ 1
                         loai_goi = thong_tin[1]
