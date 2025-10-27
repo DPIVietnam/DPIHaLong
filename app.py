@@ -118,7 +118,7 @@ def get_photos_printed_ht():
     date_now = now.strftime("%Y_%m_%d")
     target_time = now.replace(hour=16, minute=0, second=0, microsecond=0)
     path_ops = r"C:\CapImages\Ops"
-    customer_path = r"C:\Customers"
+    customer_path = r"C:\SWHL"
     photo_standard = 0
     photo_extra = 0
     photo_full = 0
