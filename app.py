@@ -129,44 +129,48 @@ def get_photos_printed_ht():
     photo_full = 0
     photo_customer = get_count_folder(customer_path)
     print(date_now)
-    try:
-        for file_name in os.listdir(path_ops):
-            if file_name.startswith(date_now) and file_name.endswith('_Log.txt'):
-                duong_dan_file = os.path.join(path_ops, file_name)
+    if os.path.exists(path_ops):
+        try:
+            for file_name in os.listdir(path_ops):
+                if file_name.startswith(date_now) and file_name.endswith('_Log.txt'):
+                    duong_dan_file = os.path.join(path_ops, file_name)
 
-                with open(duong_dan_file, 'r') as file:
-                    lines = file.readlines()
+                    with open(duong_dan_file, 'r') as file:
+                        lines = file.readlines()
 
-                    # Lặp qua từng dòng để tính tổng tiền
-                    for line in lines:
-                        # Tách thông tin từ dòng
-                        thong_tin = line.strip().split(', ')
+                        # Lặp qua từng dòng để tính tổng tiền
+                        for line in lines:
+                            # Tách thông tin từ dòng
+                            thong_tin = line.strip().split(', ')
 
-                        # Lấy giá trị từ cột thứ 6 (số tiền)
-                        # so_tien = int(thong_tin[5])
+                            # Lấy giá trị từ cột thứ 6 (số tiền)
+                            # so_tien = int(thong_tin[5])
 
-                        # Lấy loại gói từ cột thứ 1
-                        loai_goi = thong_tin[1]
+                            # Lấy loại gói từ cột thứ 1
+                            loai_goi = thong_tin[1]
 
-                        # Tính tổng tiền dựa trên loại gói
-                        if "Standard" in loai_goi:
-                            photo_standard += 1
-                        elif "Extra" in loai_goi:
-                            photo_extra += 1
-                        elif "Full" in loai_goi:
-                            photo_full += 1
-    except Exception as e:
-        db.session.rollback()
-        print(f"Lỗi: {e}")
+                            # Tính tổng tiền dựa trên loại gói
+                            if "Standard" in loai_goi:
+                                photo_standard += 1
+                            elif "Extra" in loai_goi:
+                                photo_extra += 1
+                            elif "Full" in loai_goi:
+                                photo_full += 1
+        except Exception as e:
+            db.session.rollback()
+            print(f"Lỗi: {e}")
         
     folder_path_pos1 = f"C:\\DNP\\Hot Folder\\prints\\Archive"
     folder_path_pos2 = f"\\DPIPrintserver2\\prints\\Archive"
 
-    path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s8x10'
-    path_pos2 = folder_path_pos2 + f'\\{formatted_date}\\s8x10'
+    photos_printed_pos1 = 0
 
-    photos_printed_pos1 = get_count_files(path_pos1)
-    photos_printed_pos2 = get_count_files(path_pos2)
+    if os.path.exists(folder_path_pos1):
+        path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s8x10'
+        path_pos2 = folder_path_pos2 + f'\\{formatted_date}\\s8x10'
+
+        photos_printed_pos1 = get_count_files(path_pos1)
+        photos_printed_pos2 = get_count_files(path_pos2)
 
     print(photos_printed_pos1)
 
