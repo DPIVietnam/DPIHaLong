@@ -116,7 +116,7 @@ def get_count_folder(folder_path):
 @app.route('/get_photos_printed_ht', methods=['GET'])
 def get_photos_printed_ht():
     date_now = now.strftime("%Y_%m_%d")
-    target_time = now.replace(hour=16, minute=0, second=0, microsecond=0)
+    target_time = now.replace(hour=23, minute=0, second=0, microsecond=0)
     path_ops = r"C:\CapImages\Ops"
     customer_path = r"C:\SWHL"
     photo_standard = 0
@@ -162,6 +162,8 @@ def get_photos_printed_ht():
 
     photos_printed_pos1 = get_count_files(path_pos1)
     photos_printed_pos2 = get_count_files(path_pos2)
+
+    print(photos_printed_pos1)
 
 
     file_stand = 0
