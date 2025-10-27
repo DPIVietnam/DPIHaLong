@@ -154,7 +154,7 @@ def get_photos_printed_ht():
         db.session.rollback()
         print(f"Lỗi: {e}")
         
-    folder_path_pos1 = f"C:\\prints\\Archive"
+    folder_path_pos1 = f"C:\\DNP\\Hot Folder\\prints\\Archive"
     folder_path_pos2 = f"\\DPIPrintserver2\\prints\\Archive"
 
     path_pos1 = folder_path_pos1 + f'\\{formatted_date}\\s8x10'
