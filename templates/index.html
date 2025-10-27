@@ -12,11 +12,12 @@
 <body>
     <div class="container">
         <p class="title">DIGITAL PHOTO INDUSTRIES</p>
+        <p class="title">DPI HA LONG</p>
         <p id="today">Ngày: </p>
         <div class="tabs">
             <div class="tab-buttons">
-                <p class="tab-button active title" id="tab-coaster">Log mộc xà</p>
-                <p class="title tab-button" id="tab-honthom">Log hòn thơm</p>
+                <p class="tab-button active title" id="tab-coaster">Log Dragon Park</p>
+                <p class="title tab-button" id="tab-honthom">Log Ferry Wheel</p>
             </div>
             
             <div class="tab-content">
@@ -38,24 +39,12 @@
                         <label for="total_printed" class="text_label_cost">Doanh thu</label>
                         <p id="total_cost"></p>
                     </div>
-            
-                    <div class="general show_qrcode">
-                        <p class="title">TÌM LẠI QR CODE</p>
-                        <div class="input-qrcode">
-                            <label for="link-qrcode">Nhập số của Ảnh cần tìm</label>
-                            <input type="text" id="input_qr" class="link-qrcode" placeholder="Example: 4011">
-                            <button id="checkNumQr">Kiểm tra</button> 
-                        </div>
-                        <div class="output-qrcode" id="output_qr">
-                            <img id="qrcode" src="/static/images/coaster.png" alt="QR Code will appear here" style="max-width: 300px;" />
-                        </div>
-                    </div>
                 </div>
     
                 <!-- Form 2: Mã hóa văn bản -->
                 <div class="tab-pane" id="tab2">
                     <div class="general">
-                        <label for="total_printed_ht" class="text_label">Tổng số hình đã in</label>
+                        <label for="total_printed_ht" class="text_label">Total Photos Printed</label>
                         <p id="photos_printed_ht"></p>
                     </div>
                     <div class="general">
@@ -75,68 +64,6 @@
                         <p id="photo_customer"></p>
                     </div>
 
-                    <div class="add_files_container">
-                        <p class="sub-title">1. Thêm file ảnh cho khách</p>
-                        <div class="add_files_row">
-                            <div class="files_printed">
-                                <label for="lastFiveDigits">Ảnh đã in: </label>
-                                <input type="text" id="lastFiveDigits" name="last_five_digits" required placeholder="Nhập số hình ảnh">
-                                <button onclick="check_dir()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            </div>
-                            <div class="files_more">
-                                <label for="imgNumber">Ảnh cần thêm: </label>
-                                <input type="text" id="imgNumber" placeholder="Nhập số hình ảnh" name="find_img_add" required>
-                                <button onclick="checkImage()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            </div>
-                        </div>
-                        <div class="img_display">
-                            <div class="img_printed">
-                                <p id="result1"></p>
-                                <div id="check_dir_img"></div>
-                            </div>
-                            <div class="img_more">
-                                <p id="result"></p>
-                                <div id="imageContainer"></div>
-                            </div>
-                        </div>
-                        <button class="btn_submit" id="add_more_images">Thêm ảnh điện tử</button>
-                    </div>
-
-                    <div class="add_files_container rembg">
-                        <p class="sub-title">2. Chỉnh sửa ảnh lỗi</p>
-                        <div class="add_files_row">
-                            <div class="display_img">
-                                <div class="files_printed">
-                                    <input type="text" id="err_imgNumber" placeholder="Nhập số hình ảnh" required>
-                                    <button id="find_img"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                </div>
-                                <p id="err_result"></p>
-                                <div id="err_imageContainer"></div>
-                            </div>
-                            
-                            <div class="files_more">
-                                <div class="d-flex btn-right">
-                                    <button id="edit_try">Thử lại</button>
-                                    <button id="reload_img">Reload hình ảnh</button>
-                                </div>
-                                <p id="err_result1" style="margin-top: 4px"> Ảnh sau khi sửa </p>
-                                <div id="err_imageContainer1"></div>
-                            </div>
-                        </div>
-                        <button class="btn_submit" id="remove_bg">Tách nền</button>
-                    </div>
-
-                    <div class="add_files_container rembg">
-                        <p class="sub-title">3. Tìm lại ảnh cũ</p>
-                        <div class="add_files_row">
-                            <div class="display_img old-photo-container">
-                                <input type="text" id="numOldPhoto" placeholder="Nhập số hình ảnh" required>
-                                <input required type="date" name="datePhoto" id="datePhoto">
-                                <button class="btn-search" id="old-photo"><i class="fa-solid fa-magnifying-glass"></i> SEARCH </button>
-                            </div>
-                        </div>
-                        <p id="notification">Tìm ảnh thành công rồi đó. Xin chúc mừng nha BABY!!!</p>
-                    </div>
                 </div>
             </div>
         </div>
